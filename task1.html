@@ -1,0 +1,666 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Landing Page</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background: url('https://img.freepik.com/premium-photo/old-grunge-antique-paper-texture_196038-19409.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+    }
+
+    /* Navbar */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      transition: 0.3s;
+      background: transparent;
+      color: white;
+      z-index: 1000;
+    }
+
+    nav.scrolled {
+      background: #333;
+      color: white;
+      box-shadow: 0 2px 5px rgba(65, 63, 63, 0.2);
+      padding: 8px 20px;
+    }
+    
+    .logo img {
+      height: 50px;
+      width: auto;
+      border-radius: 50px;
+    }
+   
+    .menu a {
+      text-decoration: none;
+      color: inherit;
+      margin: 0 15px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      padding: 8px 12px;
+      border-radius: 5px;
+    }
+
+    .menu a:hover {
+      color: black;
+      background-color: rgb(101, 255, 196);
+    }
+    .search-bar {
+      display: center;
+      align-items: center;
+    }
+
+    .search-bar input {
+      padding: 20px 60px;
+      border: none;
+      border-radius: 20px 0 0 20px;
+      outline: none;
+    }
+
+    .search-bar button {
+      padding: 20px 60px;
+      border: rgb(101, 255, 196);
+      background: black;
+      color: rgb(101, 255, 196);
+      font-weight: bold;
+      border-radius: 0 20px 20px 0;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-bar button:hover {
+      background: rgb(101, 255, 196);
+      color: black;
+    }
+    #noResults {
+      display:none;
+      margin-top:20px;
+      font-size:1.2rem;
+      color:red;
+    }/* Sections */
+    section {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      scroll-snap-align: start;
+      padding: 20px;
+      position: relative;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: url('https://media.istockphoto.com/id/1457032233/photo/large-book-collection.jpg?s=612x612&w=0&k=20&c=PmovqUsntCYrMjZ7bjm8sgtJ2frZSYV8zzgte_xZr8Y=') no-repeat center center/cover;
+      color: rgb(101, 255, 196);
+      font-family: sans-serif;
+      font-style: italic;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1;
+    }
+
+    .hero div {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+    }
+
+    /* About Section */
+    #about {
+      background-image: url('https://as1.ftcdn.net/jpg/00/30/06/98/1000_F_30069813_AHjM6gAVSI1BrVB5UhEwbh5a2xs5tslt.jpg');
+      background-size: cover;
+      background-position: center;
+      flex-direction: column;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      scroll-snap-align: start;
+      padding: 20px;
+      position: relative;
+    }
+
+    #about .content-box {
+      background: rgba(255, 255, 255, 0);
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 700px;
+      position: relative;
+      z-index: 2;
+    }
+
+    #about h2 {
+      margin-bottom: 20px;
+      font-size: 2rem;
+      color: #222;
+    }
+
+    #about p {
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    /* Books Section */
+    /* Books Section */
+#books {
+  background: rgba(255, 255, 255, 0);
+  flex-direction: column;
+  text-align: center;
+}
+
+#books h2 {
+  margin-bottom: 10px;
+  font-size: 2rem;
+  color: #222;
+}
+
+#books p {
+  margin-bottom: 20px;
+  color: #444;
+}
+
+/* Books Grid */
+
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      width: 80%;
+      margin: 20px auto 0;
+    }
+
+    .book-card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .book-card:hover { transform: scale(1.05); }
+    .book-card img { width: 100%; border-radius: 10px; }
+    .book-card h3 { margin: 10px 0; }
+
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+  .books-grid {
+    grid-template-columns: 1fr; /* 1 per row on mobile */
+  }
+}
+/* Modal */
+.modal {
+      display: none;
+      position: fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 400px;
+      text-align: center;
+      position: relative;
+    }
+
+    .modal-content h2 { margin-bottom: 10px; }
+    .modal-content p { margin-bottom: 20px; }
+    .modal-content button {
+      padding: 10px 20px;
+      background: rgb(101, 255, 196);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+.close {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+}
+
+.read-btn {
+  margin-top: 20px;
+  padding: 12px 25px;
+  border: none;
+  background: rgb(101, 255, 196);
+  color: black;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.read-btn:hover {
+  background: black;
+  color: white;
+}
+
+
+
+    /* Contact Section */
+#contact {
+  background: rgba(0, 0, 0, 0.349);
+  flex-direction: column;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+#contact h2 {
+  margin-bottom: 10px;
+  font-size: 2rem;
+  color: #222;
+}
+
+#contact p {
+  margin-bottom: 20px;
+  color: #444;
+}
+
+/* Contact Container */
+.contact-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Contact Info */
+.contact-info {
+  flex: 1;
+  min-width: 300px;
+  text-align: left;
+}
+
+.contact-info h3 {
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.contact-info p {
+  margin-bottom: 10px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.contact-info i {
+  color: rgb(101, 255, 196);
+}
+
+/* Contact Form */
+.contact-form {
+  flex: 1;
+  min-width: 300px;
+}
+
+.contact-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-form input, 
+.contact-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+  font-size: 1rem;
+}
+
+.contact-form textarea {
+  resize: none;
+  height: 120px;
+}
+
+.contact-form button {
+  background: rgb(101, 255, 196);
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.contact-form button:hover {
+  background: black;
+  color: rgb(101, 255, 196);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contact-container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+      }
+
+      .menu a {
+        margin: 10px 0;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <div class="logo">
+      <img src="https://static.vecteezy.com/system/resources/previews/041/144/726/non_2x/education-logo-on-letter-l-with-graduation-hat-icon-graduation-symbol-vector.jpg" 
+           alt="E-Library Logo">
+    </div>
+
+    <div class="menu">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#books">Books</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div>
+      <h1>Welcome to E-Library — Knowledge Anytime, Anywhere</h1>
+      <p>Access to unlimited information of knowledge!</p>
+      <p>For freee!!</p>
+
+    <div class="search-bar">
+  <input type="text" id="searchInput" placeholder="Search books...">
+  <button><i class="fas fa-search fa-lg"></i></button>
+</div>
+
+<!-- Message for no results -->
+<p id="noResults" style="display:none; margin-top:20px; font-size:1.2rem; color:red;">
+  ❌ No results found
+</p>
+
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <div class="content-box">
+      <h2>About Us</h2>
+      <p>
+        Welcome to E-Library, your online reading companion! Whether you’re a student preparing for exams, 
+        a researcher looking for journals, or just someone who loves to read, we’ve got you covered. 
+        Our vast collection includes textbooks, novels, magazines, and more — available anytime, from any device.
+      </p>
+      <p>
+        E-Library is a digital platform that brings the world of knowledge to your fingertips. 
+        Our mission is to make reading and learning accessible to everyone, anytime and anywhere. 
+        With thousands of e-books, research papers, and journals, we aim to create a space where readers, 
+        students, and researchers can explore information without limits.
+      </p>
+    </div>
+  </section>
+
+
+<!-- Books -->
+  <section id="books">
+    <h2>Our Books</h2>
+    <div class="book-grid">
+      <!-- Example Books -->
+      <div class="book-card" data-book="book1">
+        <img src="https://cdn-icons-png.freepik.com/512/14835/14835048.png" alt="Book">
+        <h3>Book One</h3>
+        <p>Author A</p>
+      </div>
+      <div class="book-card" data-book="book2">
+        <img src="https://cdn-icons-png.freepik.com/512/14835/14835048.png" alt="Book">
+        <h3>Book Two</h3>
+        <p>Author B</p>
+      </div>
+      <div class="book-card" data-book="book3">
+        <img src="https://cdn-icons-png.freepik.com/512/14835/14835048.png" alt="Book">
+        <h3>Book Three</h3>
+        <p>Author C</p>
+      </div>
+      <div class="book-card" data-book="book4">
+        <img src="https://cdn-icons-png.freepik.com/512/14835/14835048.png" alt="Book">
+        <h3>Book Four</h3>
+        <p>Author D</p>
+      </div>
+      <!-- Add more book-cards here -->
+    </div>
+  </section>
+
+<!-- Modal (Hidden by default) -->
+<div id="book1" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Book One</h2>
+      <p>Details and description of Book One.</p>
+      <button>Read Now</button>
+    </div>
+  </div>
+  <div id="book2" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Book Two</h2>
+      <p>Details and description of Book Two.</p>
+      <button>Read Now</button>
+    </div>
+  </div>
+  <div id="book3" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Book Three</h2>
+      <p>Details and description of Book Three.</p>
+      <button>Read Now</button>
+    </div>
+  </div>
+  <div id="book4" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Book Four</h2>
+      <p>Details and description of Book Four.</p>
+      <button>Read Now</button>
+    </div>
+  </div>
+ 
+ 
+<!-- Contact Section -->
+<section id="contact">
+  <h2>Contact Us</h2>
+  <p>We’d love to hear from you! Reach out with any questions or feedback.</p>
+
+  <div class="contact-container">
+    <!-- Contact Info -->
+    <div class="contact-info">
+      <h3>Get in Touch</h3>
+      <p><i class="fas fa-map-marker-alt"></i> 123 Library Street, Knowledge City, India</p>
+      <p><i class="fas fa-envelope"></i> support@elibrary.com</p>
+      <p>
+        <a href="#"><i class="fab fa-facebook"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-linkedin"></i></a>
+      </p>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="contact-form">
+      <form action="#" method="POST">
+        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="email" name="email" placeholder="Your Email" required>
+        <textarea name="message" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+  <script>
+    // Change navbar style when scrolling
+    window.addEventListener("scroll", function() {
+      let navbar = document.getElementById("navbar");
+      if (window.scrollY > 50) {
+        navbar.classList.add("scrolled");
+      } else {
+        navbar.classList.remove("scrolled");
+      }
+    });
+// Live Book Search with "No results" message
+    const books = document.querySelectorAll(".book-card");
+    const modals = document.querySelectorAll(".modal");
+    const closes = document.querySelectorAll(".close");
+
+books.forEach(book => {
+      book.addEventListener("click", () => {
+        let modalId = book.getAttribute("data-book");
+        document.getElementById(modalId).style.display = "flex";
+      });
+    });
+
+    closes.forEach(close => {
+      close.addEventListener("click", () => {
+        close.parentElement.parentElement.style.display = "none";
+      });
+    });
+
+    window.addEventListener("click", (e) => {
+      if (e.target.classList.contains("modal")) {
+        e.target.style.display = "none";
+      }
+    });
+
+    // Search
+    const searchInput = document.getElementById("searchInput");
+    const searchBtn = document.getElementById("searchBtn");
+    const noResults = document.getElementById("noResults");
+
+    function openModal(bookId) {
+      let modal = document.getElementById(bookId);
+      if (modal) {
+        modal.style.display = "flex";
+      }
+    }
+
+    // Live filtering
+    searchInput.addEventListener("input", function () {
+      let query = this.value.toLowerCase();
+      let found = false;
+
+      books.forEach(book => {
+        let title = book.querySelector("h3").textContent.toLowerCase();
+        let author = book.querySelector("p").textContent.toLowerCase();
+
+        if (title.includes(query) || author.includes(query)) {
+          book.style.display = "block";
+          found = true;
+        } else {
+          book.style.display = "none";
+        }
+      });
+
+      noResults.style.display = found ? "none" : "block";
+    });
+
+    // Exact match modal open
+    function handleSearchAction() {
+      let query = searchInput.value.trim().toLowerCase();
+      if (!query) return;
+
+      let matchedBook = null;
+
+      books.forEach(book => {
+        let title = book.querySelector("h3").textContent.toLowerCase();
+        let author = book.querySelector("p").textContent.toLowerCase();
+
+        if (title === query || author === query) {
+          matchedBook = book;
+        }
+      });
+
+      if (matchedBook) {
+        let bookId = matchedBook.getAttribute("data-book");
+        openModal(bookId);
+      } else {
+        noResults.style.display = "block";
+      }
+    }
+
+    searchInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        handleSearchAction();
+      }
+    });
+
+    searchBtn.addEventListener("click", handleSearchAction);
+
+
+
+  </script>
+</body>
+</html>
